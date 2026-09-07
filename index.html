@@ -1200,25 +1200,19 @@
 
         function openAppointments() {
 
+    document
+        .getElementById('dashboard')
+        .style
+        .display = 'none';
 
-            document
-                .getElementById('dashboard')
-                .style
-                .display = 'none';
+    document
+        .getElementById('appointmentsScreen')
+        .style
+        .display = 'block';
 
+    console.log('Appointments screen opened');
 
-
-            document
-                .getElementById('appointmentsScreen')
-                .style
-                .display = 'block';
-
-
-
-            loadAppointments();
-
-        }
-
+}
 
 
         function closeAppointments() {
