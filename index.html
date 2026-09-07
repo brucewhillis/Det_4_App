@@ -517,18 +517,15 @@
 
 
     <script>
+const SUPABASE_URL = 'https://gsgnnqfjmpxkoddlwwiu.supabase.co';
 
-       const SUPABASE_URL =
-    'https://gsgnnqfjmpxkoddlwwiu.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_abEQ7KX-rKJnmLK388UaYQ_ZDBjzcZk';
 
-const SUPABASE_KEY =
-    'sb_publishable_abEQ7KX-rKJnmLK388UaYQ_ZDBjzcZk';
-
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+      
             );
 
 
