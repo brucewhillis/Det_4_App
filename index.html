@@ -200,7 +200,7 @@
                 // Get the user's profile from app_users
                 const { data: userProfile, error: profileError } =
                     await supabaseClient
-                        .from('app_users')
+                        .from('App_Users')
                         .select('*')
                         .eq('auth_user_id', authData.user.id)
                         .single();
