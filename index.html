@@ -125,5 +125,23 @@
         SUPABASE_KEY
     );
 </script>
+    <script>
+    async function testSupabaseConnection() {
+        const { data, error } = await supabaseClient
+            .from('connection_test')
+            .select('*');
+
+        if (error) {
+            console.error('Supabase connection failed:', error);
+            alert('Supabase connection FAILED: ' + error.message);
+            return;
+        }
+
+        console.log('Supabase connection successful:', data);
+        alert('Supabase connection SUCCESSFUL!');
+    }
+
+    testSupabaseConnection();
+</script>
 </body>
 </html>
