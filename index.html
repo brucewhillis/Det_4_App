@@ -497,11 +497,11 @@
     <p>View and create your appointments.</p>
 
     <button
-        type="button"
-        onclick="alert('the button works!')"
-    >
-        Open
-    </button>
+    type="button"
+    onclick="openAppointments()"
+>
+    Open
+</button>
 </div>
 
 
@@ -1192,17 +1192,8 @@
 
        ```javascript
 function openAppointments() {
-
-    const appointmentsScreen =
-        document.getElementById('appointmentsScreen');
-
-    if (!appointmentsScreen) {
-
-        alert('ERROR: The Appointments screen was not found.'
-        );
-
-        return;
-    }
+    alert('openAppointments is working!');
+}
 
     alert('Appointments screen found!'
     );
