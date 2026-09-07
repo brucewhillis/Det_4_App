@@ -207,20 +207,23 @@
 
 
                 // Check for profile error
-                if (profileError) {
+               if (profileError) {
 
-                    console.error(
-                        'Profile lookup error:',
-                        profileError
-                    );
+    console.error(
+        'Profile lookup error:',
+        profileError
+    );
 
-                    message.textContent =
-                        'Login successful, but your Det 4 profile could not be found.';
+    message.textContent =
+        'Profile Error: ' +
+        profileError.message +
+        ' | Code: ' +
+        profileError.code;
 
-                    message.className = 'error';
+    message.className = 'error';
 
-                    return;
-                }
+    return;
+}
 
 
                 // Check account status
