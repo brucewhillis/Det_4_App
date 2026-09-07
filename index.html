@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -12,6 +11,8 @@
 
     <title>Det 4 App</title>
 
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
 
@@ -19,111 +20,111 @@
             box-sizing: border-box;
         }
 
-
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f2f2f2;
-            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f2f4f7;
+            color: #222;
         }
 
+        /* =========================
+           LOGIN
+           ========================= */
 
-        /* LOGIN */
+        #loginScreen {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
         .login-container {
-            width: 90%;
-            max-width: 400px;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-card {
             background: white;
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
         }
 
-
-        h1 {
+        .login-card h1 {
             text-align: center;
-            margin-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 8px;
         }
 
-
-        .subtitle {
+        .login-card p {
             text-align: center;
             color: #666;
             margin-bottom: 25px;
         }
 
-
         label {
             display: block;
-            margin-bottom: 6px;
             font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 6px;
         }
-
 
         input {
             width: 100%;
             padding: 12px;
-            margin-bottom: 18px;
             border: 1px solid #ccc;
             border-radius: 6px;
             font-size: 16px;
         }
 
-
         button {
-            width: 100%;
-            padding: 13px;
+            cursor: pointer;
             border: none;
             border-radius: 6px;
+            padding: 12px 18px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .login-button {
+            width: 100%;
+            margin-top: 20px;
             background: #333;
             color: white;
-            font-size: 16px;
-            cursor: pointer;
         }
 
-
-        button:hover {
+        .login-button:hover {
             background: #555;
         }
-
 
         #message {
             margin-top: 15px;
             text-align: center;
+            font-weight: bold;
         }
-
-
-        .success {
-            color: green;
-        }
-
 
         .error {
-            color: red;
+            color: #b00020;
+        }
+
+        .success {
+            color: #087f23;
         }
 
 
-        /* DASHBOARD */
-
-        #dashboard {
-            display: none;
-        }
-
+        /* =========================
+           HEADER
+           ========================= */
 
         .header {
             background: #222;
             color: white;
-            padding: 18px 20px;
+            padding: 15px 20px;
         }
 
-
         .header-content {
-            max-width: 900px;
+            max-width: 1100px;
             margin: auto;
             display: flex;
             justify-content: space-between;
@@ -131,196 +132,265 @@
             gap: 15px;
         }
 
-
         .header h1 {
             margin: 0;
-            text-align: left;
             font-size: 24px;
         }
 
-
         .logout-button {
-            width: auto;
-            padding: 10px 18px;
             background: #b00020;
+            color: white;
         }
-
 
         .logout-button:hover {
-            background: #d00025;
+            background: #8b0018;
         }
 
+
+        /* =========================
+           MAIN CONTENT
+           ========================= */
 
         .dashboard-container {
-            width: 90%;
-            max-width: 900px;
-            margin: 30px auto;
+            max-width: 1100px;
+            margin: auto;
+            padding: 25px 20px;
         }
-
 
         .welcome-card {
             background: white;
-            padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 25px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-
 
         .welcome-card h2 {
             margin-top: 0;
         }
 
-
         .profile-grid {
             display: grid;
-            grid-template-columns: repeat(
-                auto-fit,
-                minmax(180px, 1fr)
-            );
-            gap: 15px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
         }
-
 
         .profile-item {
             background: #f7f7f7;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+        .profile-item strong {
+            display: block;
+            margin-bottom: 4px;
         }
 
 
-        .profile-label {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-
-        .profile-value {
-            font-size: 17px;
-            font-weight: bold;
-        }
-
+        /* =========================
+           DASHBOARD CARDS
+           ========================= */
 
         .section-title {
             margin-top: 30px;
             margin-bottom: 15px;
         }
 
-
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(
-                auto-fit,
-                minmax(220px, 1fr)
-            );
-            gap: 15px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
         }
-
 
         .dashboard-card {
             background: white;
-            padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-
 
         .dashboard-card h3 {
             margin-top: 0;
+            margin-bottom: 8px;
         }
-
 
         .dashboard-card p {
             color: #666;
-            min-height: 40px;
+            line-height: 1.5;
         }
 
-
-        .dashboard-card button {
+        .card-button {
+            background: #333;
+            color: white;
             margin-top: 10px;
         }
 
+        .card-button:hover {
+            background: #555;
+        }
 
-        .hidden {
-            display: none;
+
+        /* =========================
+           APPOINTMENTS
+           ========================= */
+
+        #appointmentsScreen {
+            min-height: 100vh;
+            background: #f2f4f7;
+        }
+
+        .appointment-form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .appointment-form h2 {
+            margin-top: 0;
+        }
+
+        .appointment-submit {
+            background: #333;
+            color: white;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .appointment-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .appointment-card h3 {
+            margin-top: 0;
+        }
+
+        .back-button {
+            background: #666;
+            color: white;
+        }
+
+        #appointmentMessage {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           MOBILE
+           ========================= */
+
+        @media (max-width: 700px) {
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header h1 {
+                text-align: center;
+            }
+
+            .logout-button {
+                width: 100%;
+            }
+
+            .dashboard-container {
+                padding: 20px 15px;
+            }
+
+            .login-card {
+                padding: 20px;
+            }
         }
 
     </style>
-
 </head>
 
 
 <body>
 
 
-    <!-- LOGIN SCREEN -->
+    <!-- ==================================================
+         LOGIN SCREEN
+         ================================================== -->
 
-    <div
-        id="loginScreen"
-        class="login-container"
-    >
+    <div id="loginScreen">
 
-        <h1>
-            Det 4 App
-        </h1>
+        <div class="login-container">
 
+            <div class="login-card">
 
-        <div class="subtitle">
-            Sign in to continue
+                <h1>Det 4 App</h1>
+
+                <p>
+                    Sign in to access the application
+                </p>
+
+                <form id="loginForm">
+
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                    <button
+                        type="submit"
+                        class="login-button"
+                    >
+                        Sign In
+                    </button>
+
+                </form>
+
+                <div id="message"></div>
+
+            </div>
+
         </div>
-
-
-        <form id="loginForm">
-
-            <label for="email">
-                Email
-            </label>
-
-
-            <input
-                type="email"
-                id="email"
-                placeholder="Enter your email"
-                required
-            >
-
-
-            <label for="password">
-                Password
-            </label>
-
-
-            <input
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                required
-            >
-
-
-            <button type="submit">
-                Sign In
-            </button>
-
-        </form>
-
-
-        <div id="message"></div>
 
     </div>
 
 
 
-    <!-- ============================= -->
-    <!-- DASHBOARD SCREEN              -->
-    <!-- ============================= -->
+    <!-- ==================================================
+         DASHBOARD
+         ================================================== -->
 
-    <div id="dashboard">
-
-
-        <!-- DASHBOARD HEADER -->
+    <div
+        id="dashboard"
+        style="display: none;"
+    >
 
         <div class="header">
 
@@ -330,10 +400,10 @@
                     Det 4 App
                 </h1>
 
-
                 <button
                     id="logoutButton"
                     class="logout-button"
+                    type="button"
                 >
                     Logout
                 </button>
@@ -342,9 +412,6 @@
 
         </div>
 
-
-
-        <!-- DASHBOARD CONTENT -->
 
         <div class="dashboard-container">
 
@@ -357,98 +424,32 @@
                     Welcome!
                 </h2>
 
-
                 <div class="profile-grid">
 
-
                     <div class="profile-item">
-
-                        <div class="profile-label">
-                            Rank
-                        </div>
-
-
-                        <div
-                            class="profile-value"
-                            id="profileRank"
-                        >
-                            -
-                        </div>
-
+                        <strong>Rank</strong>
+                        <span id="profileRank">-</span>
                     </div>
 
-
-
                     <div class="profile-item">
-
-                        <div class="profile-label">
-                            Name
-                        </div>
-
-
-                        <div
-                            class="profile-value"
-                            id="profileName"
-                        >
-                            -
-                        </div>
-
+                        <strong>Name</strong>
+                        <span id="profileName">-</span>
                     </div>
 
-
-
                     <div class="profile-item">
-
-                        <div class="profile-label">
-                            Role
-                        </div>
-
-
-                        <div
-                            class="profile-value"
-                            id="profileRole"
-                        >
-                            -
-                        </div>
-
+                        <strong>Role</strong>
+                        <span id="profileRole">-</span>
                     </div>
 
-
-
                     <div class="profile-item">
-
-                        <div class="profile-label">
-                            Soldier ID
-                        </div>
-
-
-                        <div
-                            class="profile-value"
-                            id="profileSoldierId"
-                        >
-                            -
-                        </div>
-
+                        <strong>Soldier ID</strong>
+                        <span id="profileSoldierId">-</span>
                     </div>
 
-
-
                     <div class="profile-item">
-
-                        <div class="profile-label">
-                            Account Status
-                        </div>
-
-
-                        <div
-                            class="profile-value"
-                            id="profileStatus"
-                        >
-                            -
-                        </div>
-
+                        <strong>Account Status</strong>
+                        <span id="profileStatus">-</span>
                     </div>
-
 
                 </div>
 
@@ -456,10 +457,10 @@
 
 
 
-            <!-- MAIN FEATURES -->
+            <!-- GENERAL FEATURES -->
 
             <h2 class="section-title">
-                Det 4 Resources
+                My Information
             </h2>
 
 
@@ -474,14 +475,14 @@
                         My Profile
                     </h3>
 
-
                     <p>
-                        View your Det 4 personnel information.
+                        View your account information.
                     </p>
 
-
                     <button
-                        onclick="openProfile()"
+                        type="button"
+                        class="card-button"
+                        onclick="showMyProfile()"
                     >
                         Open
                     </button>
@@ -489,21 +490,27 @@
                 </div>
 
 
-
                 <!-- APPOINTMENTS -->
 
                 <div class="dashboard-card">
-    <h3>Appointments</h3>
-    <p>View and create your appointments.</p>
 
-    <button
-    type="button"
-    onclick="openAppointments()"
->
-    Open
-</button>
-</div>
+                    <h3>
+                        Appointments
+                    </h3>
 
+                    <p>
+                        Create and view your appointments.
+                    </p>
+
+                    <button
+                        type="button"
+                        class="card-button"
+                        onclick="openAppointments()"
+                    >
+                        Open
+                    </button>
+
+                </div>
 
 
                 <!-- TRAINING -->
@@ -514,13 +521,13 @@
                         Training
                     </h3>
 
-
                     <p>
-                        View training requirements and status.
+                        View training information and requirements.
                     </p>
 
-
                     <button
+                        type="button"
+                        class="card-button"
                         onclick="showComingSoon('Training')"
                     >
                         Open
@@ -529,102 +536,100 @@
                 </div>
 
 
+                <!-- ALERT ROSTER -->
 
-                <!-- Alert Roster -->
+                <div class="dashboard-card">
 
-                
-<div class="dashboard-card">
+                    <h3>
+                        Alert Roster
+                    </h3>
 
-    <h3>
-        Alert Roster
-    </h3>
+                    <p>
+                        View current alert roster information.
+                    </p>
 
-    <p>
-        View the current Det 4 alert roster.
-    </p>
-
-    <button
-        onclick="showComingSoon('Alert Roster')"
-    >
-        Open
-    </button>
-
-</div>
-```
-
-
-
-
-            <!-- ADMIN / SUPERVISOR AREA -->
-
-            <div id="managementSection">
-
-
-                <h2 class="section-title">
-                    Management
-                </h2>
-
-
-                <div class="dashboard-grid">
-
-
-                    <!-- ADMIN -->
-
-                    <div
-                        class="dashboard-card"
-                        id="adminCard"
+                    <button
+                        type="button"
+                        class="card-button"
+                        onclick="showComingSoon('Alert Roster')"
                     >
-
-                        <h3>
-                            User Management
-                        </h3>
-
-
-                        <p>
-                            Manage Det 4 user accounts and roles.
-                        </p>
-
-
-                        <button
-                            onclick="showComingSoon('User Management')"
-                        >
-                            Open
-                        </button>
-
-                    </div>
-
-
-
-                    <!-- SUPERVISOR -->
-
-                    <div
-                        class="dashboard-card"
-                        id="supervisorCard"
-                    >
-
-                        <h3>
-                            Supervisor Tools
-                        </h3>
-
-
-                        <p>
-                            Manage personnel assigned to you.
-                        </p>
-
-
-                        <button
-                            onclick="showComingSoon('Supervisor Tools')"
-                        >
-                            Open
-                        </button>
-
-                    </div>
-
+                        Open
+                    </button>
 
                 </div>
 
             </div>
 
+
+
+            <!-- MANAGEMENT -->
+
+            <h2
+                class="section-title"
+                id="managementTitle"
+                style="display: none;"
+            >
+                Management
+            </h2>
+
+
+            <div class="dashboard-grid">
+
+
+                <!-- ADMIN -->
+
+                <div
+                    class="dashboard-card"
+                    id="adminCard"
+                    style="display: none;"
+                >
+
+                    <h3>
+                        User Management
+                    </h3>
+
+                    <p>
+                        Manage application users and account status.
+                    </p>
+
+                    <button
+                        type="button"
+                        class="card-button"
+                        onclick="showComingSoon('User Management')"
+                    >
+                        Open
+                    </button>
+
+                </div>
+
+
+                <!-- SUPERVISOR -->
+
+                <div
+                    class="dashboard-card"
+                    id="supervisorCard"
+                    style="display: none;"
+                >
+
+                    <h3>
+                        Supervisor Tools
+                    </h3>
+
+                    <p>
+                        View and manage information for assigned personnel.
+                    </p>
+
+                    <button
+                        type="button"
+                        class="card-button"
+                        onclick="showComingSoon('Supervisor Tools')"
+                    >
+                        Open
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -632,17 +637,16 @@
 
 
 
-    <!-- ============================= -->
-    <!-- APPOINTMENTS SCREEN           -->
-    <!-- ============================= -->
+    <!-- ==================================================
+         APPOINTMENTS SCREEN
+         IMPORTANT:
+         This is OUTSIDE the dashboard.
+         ================================================== -->
 
     <div
         id="appointmentsScreen"
         style="display: none;"
     >
-
-
-        <!-- APPOINTMENTS HEADER -->
 
         <div class="header">
 
@@ -652,12 +656,12 @@
                     Appointments
                 </h1>
 
-
                 <button
-                    class="logout-button"
+                    type="button"
+                    class="back-button"
                     onclick="closeAppointments()"
                 >
-                    Back
+                    Back to Dashboard
                 </button>
 
             </div>
@@ -665,20 +669,20 @@
         </div>
 
 
-
-        <!-- APPOINTMENTS CONTENT -->
-
         <div class="dashboard-container">
 
 
             <!-- CREATE APPOINTMENT -->
 
-            <div class="welcome-card">
+            <div class="appointment-form">
 
                 <h2>
                     Create Appointment
                 </h2>
 
+                <p>
+                    Create an appointment for yourself.
+                </p>
 
                 <form id="appointmentForm">
 
@@ -686,7 +690,6 @@
                     <label for="appointmentTitle">
                         Appointment
                     </label>
-
 
                     <input
                         type="text"
@@ -696,11 +699,9 @@
                     >
 
 
-
                     <label for="appointmentDate">
                         Date
                     </label>
-
 
                     <input
                         type="date"
@@ -709,11 +710,9 @@
                     >
 
 
-
                     <label for="appointmentTime">
                         Time
                     </label>
-
 
                     <input
                         type="time"
@@ -721,11 +720,9 @@
                     >
 
 
-
                     <label for="appointmentLocation">
                         Location
                     </label>
-
 
                     <input
                         type="text"
@@ -734,11 +731,9 @@
                     >
 
 
-
                     <label for="appointmentDescription">
                         Notes
                     </label>
-
 
                     <input
                         type="text"
@@ -747,14 +742,14 @@
                     >
 
 
-
-                    <button type="submit">
+                    <button
+                        type="submit"
+                        class="appointment-submit"
+                    >
                         Create Appointment
                     </button>
 
-
                 </form>
-
 
                 <div id="appointmentMessage"></div>
 
@@ -771,12 +766,15 @@
 
             <div id="appointmentsList">
 
-                <p>
-                    Loading appointments...
-                </p>
+                <div class="appointment-card">
+
+                    <p>
+                        Loading appointments...
+                    </p>
+
+                </div>
 
             </div>
-
 
         </div>
 
@@ -784,23 +782,21 @@
 
 
 
-    <!-- ============================= -->
-    <!-- SUPABASE                      -->
-    <!-- ============================= -->
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+    <!-- ==================================================
+         JAVASCRIPT
+         ================================================== -->
 
     <script>
 
+        /* =================================================
+           SUPABASE CONNECTION
+           ================================================= */
 
         const SUPABASE_URL =
             'https://gsgnnqfjmpxkoddlwwiu.supabase.co';
 
-
         const SUPABASE_KEY =
             'sb_publishable_abEQ7KX-rKJnmLK388UaYQ_ZDBjzcZk';
-
 
         const supabaseClient =
             supabase.createClient(
@@ -810,9 +806,17 @@
 
 
 
-        // =================================
-        // LOGIN
-        // =================================
+        /* =================================================
+           CURRENT USER
+           ================================================= */
+
+        window.currentUserProfile = null;
+
+
+
+        /* =================================================
+           LOGIN
+           ================================================= */
 
         document
             .getElementById('loginForm')
@@ -847,20 +851,17 @@
                     message.className = '';
 
 
-
                     const {
                         data: authData,
                         error: authError
                     } =
-                        await supabaseClient.auth
-                            .signInWithPassword({
+                        await supabaseClient.auth.signInWithPassword({
 
-                                email: email,
+                            email: email,
 
-                                password: password
+                            password: password
 
-                            });
-
+                        });
 
 
                     if (authError) {
@@ -870,20 +871,15 @@
                             authError
                         );
 
-
                         message.textContent =
                             'Login failed: ' +
                             authError.message;
 
-
                         message.className =
                             'error';
 
-
                         return;
-
                     }
-
 
 
                     if (!authData.user) {
@@ -891,18 +887,17 @@
                         message.textContent =
                             'Login failed. No user was returned.';
 
-
                         message.className =
                             'error';
 
-
                         return;
-
                     }
 
 
 
-                    // GET USER PROFILE
+                    /* =========================================
+                       GET APP USER PROFILE
+                       ========================================= */
 
                     const {
                         data: userProfile,
@@ -918,7 +913,6 @@
                             .single();
 
 
-
                     if (profileError) {
 
                         console.error(
@@ -926,29 +920,25 @@
                             profileError
                         );
 
-
                         message.textContent =
                             'Profile Error: ' +
-                            profileError.message +
-                            ' | Code: ' +
-                            profileError.code;
-
+                            profileError.message;
 
                         message.className =
                             'error';
 
-
                         return;
-
                     }
 
 
 
-                    // CHECK ACCOUNT STATUS
+                    /* =========================================
+                       CHECK ACCOUNT STATUS
+                       ========================================= */
 
                     if (
-                        userProfile.Account_Status
-                        !== 'Active'
+                        userProfile.Account_Status !==
+                        'Active'
                     ) {
 
                         await supabaseClient
@@ -959,36 +949,37 @@
                         message.textContent =
                             'Your account is not active. Please contact an administrator.';
 
-
                         message.className =
                             'error';
 
-
                         return;
-
                     }
 
 
 
-                    // SHOW DASHBOARD
+                    /* =========================================
+                       SHOW DASHBOARD
+                       ========================================= */
 
-                    showDashboard(userProfile);
+                    showDashboard(
+                        userProfile
+                    );
 
                 }
             );
 
 
 
-        // =================================
-        // DISPLAY DASHBOARD
-        // =================================
+        /* =================================================
+           SHOW DASHBOARD
+           ================================================= */
 
-        function showDashboard(userProfile) {
-
+        function showDashboard(
+            userProfile
+        ) {
 
             window.currentUserProfile =
                 userProfile;
-
 
 
             document
@@ -997,12 +988,10 @@
                 .display = 'none';
 
 
-
             document
                 .getElementById('appointmentsScreen')
                 .style
                 .display = 'none';
-
 
 
             document
@@ -1012,24 +1001,26 @@
 
 
 
+            /* =========================================
+               PROFILE INFORMATION
+               ========================================= */
+
             document
                 .getElementById('welcomeMessage')
                 .textContent =
                     'Welcome, ' +
-                    userProfile.Rank +
+                    (userProfile.Rank || '') +
                     ' ' +
-                    userProfile.First_Name +
+                    (userProfile.First_Name || '') +
                     ' ' +
-                    userProfile.Last_Name +
+                    (userProfile.Last_Name || '') +
                     '!';
-
 
 
             document
                 .getElementById('profileRank')
                 .textContent =
                     userProfile.Rank || '-';
-
 
 
             document
@@ -1040,19 +1031,16 @@
                     (userProfile.Last_Name || '');
 
 
-
             document
                 .getElementById('profileRole')
                 .textContent =
                     userProfile.Role || '-';
 
 
-
             document
                 .getElementById('profileSoldierId')
                 .textContent =
                     userProfile.Soldier_id || '-';
-
 
 
             document
@@ -1062,7 +1050,9 @@
 
 
 
-            // ROLE-BASED DISPLAY
+            /* =========================================
+               MANAGEMENT CARDS
+               ========================================= */
 
             const adminCard =
                 document.getElementById(
@@ -1076,169 +1066,228 @@
                 );
 
 
+            const managementTitle =
+                document.getElementById(
+                    'managementTitle'
+                );
+
 
             if (
-                userProfile.Role === 'Admin'
+                userProfile.Role ===
+                'Admin'
             ) {
 
                 adminCard.style.display =
                     'block';
 
-
                 supervisorCard.style.display =
+                    'block';
+
+                managementTitle.style.display =
                     'block';
 
             }
 
-
             else if (
-                userProfile.Role === 'Supervisor'
+                userProfile.Role ===
+                'Supervisor'
             ) {
 
                 adminCard.style.display =
                     'none';
 
-
                 supervisorCard.style.display =
                     'block';
 
-            }
+                managementTitle.style.display =
+                    'block';
 
+            }
 
             else {
 
                 adminCard.style.display =
                     'none';
 
-
                 supervisorCard.style.display =
+                    'none';
+
+                managementTitle.style.display =
                     'none';
 
             }
 
-
-
-            console.log(
-                'Logged-in user:',
-                userProfile
-            );
-
         }
 
 
 
-        // =================================
-        // LOGOUT
-        // =================================
+        /* =================================================
+           MY PROFILE
+           ================================================= */
 
-        document
-            .getElementById('logoutButton')
-            .addEventListener(
-                'click',
-                async function() {
-
-
-                    await supabaseClient
-                        .auth
-                        .signOut();
-
-
-
-                    document
-                        .getElementById('dashboard')
-                        .style
-                        .display = 'none';
-
-
-
-                    document
-                        .getElementById('appointmentsScreen')
-                        .style
-                        .display = 'none';
-
-
-
-                    document
-                        .getElementById('loginScreen')
-                        .style
-                        .display = 'block';
-
-
-
-                    document
-                        .getElementById('email')
-                        .value = '';
-
-
-
-                    document
-                        .getElementById('password')
-                        .value = '';
-
-
-
-                    document
-                        .getElementById('message')
-                        .textContent = '';
-
-                }
-            );
-
-
-
-        // =================================
-        // APPOINTMENTS
-        // =================================
-
-       ```javascript
-function openAppointments() {
-    alert('openAppointments is working!');
-}
-
-    alert('Appointments screen found!'
-    );
-
-}
-```
-
-
-
-        function closeAppointments() {
-
-
-            document
-                .getElementById('appointmentsScreen')
-                .style
-                .display = 'none';
-
-
-
-            document
-                .getElementById('dashboard')
-                .style
-                .display = 'block';
-
-        }
-
-
-
-        // =================================
-        // LOAD APPOINTMENTS
-        // =================================
-
-        async function loadAppointments() {
-
+        function showMyProfile() {
 
             const user =
                 window.currentUserProfile;
 
 
+            if (!user) {
+
+                alert(
+                    'Your profile could not be loaded.'
+                );
+
+                return;
+            }
+
+
+            alert(
+
+                'My Profile\n\n' +
+
+                'Rank: ' +
+                (user.Rank || '-') +
+
+                '\nName: ' +
+                (user.First_Name || '') +
+                ' ' +
+                (user.Last_Name || '') +
+
+                '\nEmail: ' +
+                (user.Email || '-') +
+
+                '\nSoldier ID: ' +
+                (user.Soldier_id || '-') +
+
+                '\nRole: ' +
+                (user.Role || '-') +
+
+                '\nAccount Status: ' +
+                (user.Account_Status || '-')
+
+            );
+
+        }
+
+
+
+        /* =================================================
+           APPOINTMENTS
+           ================================================= */
+
+        function openAppointments() {
+
+            console.log(
+                'Opening appointments...'
+            );
+
+
+            const dashboard =
+                document.getElementById(
+                    'dashboard'
+                );
+
+
+            const appointmentsScreen =
+                document.getElementById(
+                    'appointmentsScreen'
+                );
+
+
+            if (!dashboard) {
+
+                alert(
+                    'Dashboard element was not found.'
+                );
+
+                return;
+            }
+
+
+            if (!appointmentsScreen) {
+
+                alert(
+                    'Appointments screen was not found.'
+                );
+
+                return;
+            }
+
+
+            dashboard.style.display =
+                'none';
+
+
+            appointmentsScreen.style.display =
+                'block';
+
+
+            loadAppointments();
+
+        }
+
+
+
+        /* =================================================
+           CLOSE APPOINTMENTS
+           ================================================= */
+
+        function closeAppointments() {
+
+            const dashboard =
+                document.getElementById(
+                    'dashboard'
+                );
+
+
+            const appointmentsScreen =
+                document.getElementById(
+                    'appointmentsScreen'
+                );
+
+
+            appointmentsScreen.style.display =
+                'none';
+
+
+            dashboard.style.display =
+                'block';
+
+        }
+
+
+
+        /* =================================================
+           LOAD APPOINTMENTS
+           ================================================= */
+
+        async function loadAppointments() {
+
+            const user =
+                window.currentUserProfile;
+
+
+            const list =
+                document.getElementById(
+                    'appointmentsList'
+                );
+
 
             if (!user) {
 
-                return;
+                list.innerHTML =
+                    '<div class="appointment-card">' +
+                    '<p>You are not logged in.</p>' +
+                    '</div>';
 
+                return;
             }
+
+
+            list.innerHTML =
+                '<div class="appointment-card">' +
+                '<p>Loading appointments...</p>' +
+                '</div>';
 
 
 
@@ -1262,13 +1311,6 @@ function openAppointments() {
 
 
 
-            const list =
-                document.getElementById(
-                    'appointmentsList'
-                );
-
-
-
             if (error) {
 
                 console.error(
@@ -1278,11 +1320,14 @@ function openAppointments() {
 
 
                 list.innerHTML =
-                    '<p>Unable to load appointments.</p>';
-
+                    '<div class="appointment-card">' +
+                    '<p class="error">' +
+                    'Unable to load appointments: ' +
+                    error.message +
+                    '</p>' +
+                    '</div>';
 
                 return;
-
             }
 
 
@@ -1293,13 +1338,11 @@ function openAppointments() {
             ) {
 
                 list.innerHTML =
-                    '<div class="welcome-card">' +
+                    '<div class="appointment-card">' +
                     '<p>You currently have no appointments.</p>' +
                     '</div>';
 
-
                 return;
-
             }
 
 
@@ -1311,7 +1354,6 @@ function openAppointments() {
             data.forEach(
                 function(appointment) {
 
-
                     const card =
                         document.createElement(
                             'div'
@@ -1319,48 +1361,55 @@ function openAppointments() {
 
 
                     card.className =
-                        'welcome-card';
-
+                        'appointment-card';
 
 
                     card.innerHTML =
 
                         '<h3>' +
-                        appointment.title +
+                        escapeHtml(
+                            appointment.title
+                        ) +
                         '</h3>' +
 
                         '<p><strong>Date:</strong> ' +
-                        appointment.appointment_date +
+                        escapeHtml(
+                            appointment.appointment_date
+                        ) +
                         '</p>' +
 
                         '<p><strong>Time:</strong> ' +
-                        (
+                        escapeHtml(
                             appointment.appointment_time ||
                             'Not specified'
                         ) +
                         '</p>' +
 
                         '<p><strong>Location:</strong> ' +
-                        (
+                        escapeHtml(
                             appointment.location ||
                             'Not specified'
                         ) +
                         '</p>' +
 
                         '<p><strong>Notes:</strong> ' +
-                        (
+                        escapeHtml(
                             appointment.description ||
                             'None'
                         ) +
                         '</p>' +
 
                         '<p><strong>Status:</strong> ' +
-                        appointment.status +
+                        escapeHtml(
+                            appointment.status ||
+                            'Scheduled'
+                        ) +
                         '</p>';
 
 
-
-                    list.appendChild(card);
+                    list.appendChild(
+                        card
+                    );
 
                 }
             );
@@ -1369,9 +1418,9 @@ function openAppointments() {
 
 
 
-        // =================================
-        // CREATE APPOINTMENT
-        // =================================
+        /* =================================================
+           CREATE APPOINTMENT
+           ================================================= */
 
         document
             .getElementById('appointmentForm')
@@ -1379,22 +1428,21 @@ function openAppointments() {
                 'submit',
                 async function(event) {
 
-
                     event.preventDefault();
-
 
 
                     const user =
                         window.currentUserProfile;
 
 
-
                     if (!user) {
 
+                        alert(
+                            'You must be logged in to create an appointment.'
+                        );
+
                         return;
-
                     }
-
 
 
                     const message =
@@ -1403,11 +1451,8 @@ function openAppointments() {
                         );
 
 
-
                     message.textContent =
                         'Creating appointment...';
-
-
 
                     message.className = '';
 
@@ -1422,14 +1467,12 @@ function openAppointments() {
                             .trim();
 
 
-
                     const date =
                         document
                             .getElementById(
                                 'appointmentDate'
                             )
                             .value;
-
 
 
                     const time =
@@ -1440,7 +1483,6 @@ function openAppointments() {
                             .value;
 
 
-
                     const location =
                         document
                             .getElementById(
@@ -1448,7 +1490,6 @@ function openAppointments() {
                             )
                             .value
                             .trim();
-
 
 
                     const description =
@@ -1468,19 +1509,23 @@ function openAppointments() {
                             .from('Appointments')
                             .insert({
 
-                                title: title,
+                                title:
+                                    title,
 
                                 appointment_date:
                                     date,
 
                                 appointment_time:
-                                    time || null,
+                                    time ||
+                                    null,
 
                                 location:
-                                    location || null,
+                                    location ||
+                                    null,
 
                                 description:
-                                    description || null,
+                                    description ||
+                                    null,
 
                                 created_by:
                                     user.auth_user_id,
@@ -1511,9 +1556,7 @@ function openAppointments() {
                         message.className =
                             'error';
 
-
                         return;
-
                     }
 
 
@@ -1534,7 +1577,6 @@ function openAppointments() {
                         .reset();
 
 
-
                     loadAppointments();
 
                 }
@@ -1542,82 +1584,149 @@ function openAppointments() {
 
 
 
-        // =================================
-        // MY PROFILE
-        // =================================
+        /* =================================================
+           SIMPLE HTML SAFETY FUNCTION
+           ================================================= */
 
-        function openProfile() {
+        function escapeHtml(
+            value
+        ) {
 
+            if (
+                value === null ||
+                value === undefined
+            ) {
 
-            const profile =
-                window.currentUserProfile;
-
-
-
-            if (!profile) {
-
-                return;
+                return '';
 
             }
 
 
+            return String(value)
+
+                .replace(
+                    /&/g,
+                    '&amp;'
+                )
+
+                .replace(
+                    /</g,
+                    '&lt;'
+                )
+
+                .replace(
+                    />/g,
+                    '&gt;'
+                )
+
+                .replace(
+                    /"/g,
+                    '&quot;'
+                )
+
+                .replace(
+                    /'/g,
+                    '&#039;'
+                );
+
+        }
+
+
+
+        /* =================================================
+           COMING SOON
+           ================================================= */
+
+        function showComingSoon(
+            featureName
+        ) {
 
             alert(
-
-                'MY PROFILE\n\n' +
-
-                'Rank: ' +
-                (profile.Rank || '-') +
-                '\n' +
-
-                'First Name: ' +
-                (profile.First_Name || '-') +
-                '\n' +
-
-                'Last Name: ' +
-                (profile.Last_Name || '-') +
-                '\n' +
-
-                'Email: ' +
-                (profile.Email || '-') +
-                '\n' +
-
-                'Soldier ID: ' +
-                (profile.Soldier_id || '-') +
-                '\n' +
-
-                'Role: ' +
-                (profile.Role || '-') +
-                '\n' +
-
-                'Account Status: ' +
-                (profile.Account_Status || '-')
-
+                featureName +
+                ' is coming soon.'
             );
 
         }
 
 
 
-        // =================================
-        // TEMPORARY BUTTON FUNCTION
-        // =================================
+        /* =================================================
+           LOGOUT
+           ================================================= */
 
-        function showComingSoon(feature) {
+        document
+            .getElementById('logoutButton')
+            .addEventListener(
+                'click',
+                async function() {
 
 
-            alert(
-                feature +
-                ' will be added soon.'
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+
+                    window.currentUserProfile =
+                        null;
+
+
+                    document
+                        .getElementById(
+                            'dashboard'
+                        )
+                        .style
+                        .display =
+                        'none';
+
+
+                    document
+                        .getElementById(
+                            'appointmentsScreen'
+                        )
+                        .style
+                        .display =
+                        'none';
+
+
+                    document
+                        .getElementById(
+                            'loginScreen'
+                        )
+                        .style
+                        .display =
+                        'flex';
+
+
+                    document
+                        .getElementById(
+                            'email'
+                        )
+                        .value =
+                        '';
+
+
+                    document
+                        .getElementById(
+                            'password'
+                        )
+                        .value =
+                        '';
+
+
+                    document
+                        .getElementById(
+                            'message'
+                        )
+                        .textContent =
+                        '';
+
+                }
             );
 
-        }
 
 
     </script>
 
-
 </body>
 
 </html>
-```
