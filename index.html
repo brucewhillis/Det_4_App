@@ -1198,21 +1198,28 @@
         // APPOINTMENTS
         // =================================
 
-        function openAppointments() {
+       ```javascript
+function openAppointments() {
 
-    document
-        .getElementById('dashboard')
-        .style
-        .display = 'none';
+    const appointmentsScreen =
+        document.getElementById('appointmentsScreen');
 
-    document
-        .getElementById('appointmentsScreen')
-        .style
-        .display = 'block';
+    if (!appointmentsScreen) {
 
-    console.log('Appointments screen opened');
+        alert(
+            'ERROR: The Appointments screen was not found.'
+        );
+
+        return;
+    }
+
+    alert(
+        'Appointments screen found!'
+    );
 
 }
+```
+
 
 
         function closeAppointments() {
