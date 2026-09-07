@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -11,7 +12,6 @@
 
     <title>Det 4 App</title>
 
-    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -54,13 +54,11 @@
         .login-card h1 {
             text-align: center;
             margin-top: 0;
-            margin-bottom: 8px;
         }
 
         .login-card p {
             text-align: center;
             color: #666;
-            margin-bottom: 25px;
         }
 
         label {
@@ -92,10 +90,6 @@
             margin-top: 20px;
             background: #333;
             color: white;
-        }
-
-        .login-button:hover {
-            background: #555;
         }
 
         #message {
@@ -134,7 +128,6 @@
 
         .header h1 {
             margin: 0;
-            font-size: 24px;
         }
 
         .logout-button {
@@ -142,13 +135,14 @@
             color: white;
         }
 
-        .logout-button:hover {
-            background: #8b0018;
+        .back-button {
+            background: #666;
+            color: white;
         }
 
 
         /* =========================
-           MAIN CONTENT
+           CONTENT
            ========================= */
 
         .dashboard-container {
@@ -186,15 +180,15 @@
             margin-bottom: 4px;
         }
 
-
-        /* =========================
-           DASHBOARD CARDS
-           ========================= */
-
         .section-title {
             margin-top: 30px;
             margin-bottom: 15px;
         }
+
+
+        /* =========================
+           CARDS
+           ========================= */
 
         .dashboard-grid {
             display: grid;
@@ -211,7 +205,6 @@
 
         .dashboard-card h3 {
             margin-top: 0;
-            margin-bottom: 8px;
         }
 
         .dashboard-card p {
@@ -225,16 +218,13 @@
             margin-top: 10px;
         }
 
-        .card-button:hover {
-            background: #555;
-        }
-
 
         /* =========================
            APPOINTMENTS
            ========================= */
 
-        #appointmentsScreen {
+        #appointmentsScreen,
+        #supervisorScreen {
             min-height: 100vh;
             background: #f2f4f7;
         }
@@ -243,12 +233,8 @@
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             margin-bottom: 25px;
-        }
-
-        .appointment-form h2 {
-            margin-top: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         .appointment-submit {
@@ -270,14 +256,26 @@
             margin-top: 0;
         }
 
-        .back-button {
-            background: #666;
-            color: white;
+
+        /* =========================
+           SUPERVISOR
+           ========================= */
+
+        .personnel-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
-        #appointmentMessage {
-            margin-top: 15px;
-            font-weight: bold;
+        .personnel-card h3 {
+            margin-top: 0;
+        }
+
+        .no-data {
+            color: #666;
+            font-style: italic;
         }
 
 
@@ -304,29 +302,24 @@
                 text-align: center;
             }
 
-            .logout-button {
+            .logout-button,
+            .back-button {
                 width: 100%;
             }
 
-            .dashboard-container {
-                padding: 20px 15px;
-            }
-
-            .login-card {
-                padding: 20px;
-            }
         }
 
     </style>
+
 </head>
 
 
 <body>
 
 
-    <!-- ==================================================
-         LOGIN SCREEN
-         ================================================== -->
+    <!-- =================================================
+         LOGIN
+         ================================================= -->
 
     <div id="loginScreen">
 
@@ -349,7 +342,6 @@
                     <input
                         type="email"
                         id="email"
-                        placeholder="Enter your email"
                         required
                     >
 
@@ -360,7 +352,6 @@
                     <input
                         type="password"
                         id="password"
-                        placeholder="Enter your password"
                         required
                     >
 
@@ -383,13 +374,13 @@
 
 
 
-    <!-- ==================================================
+    <!-- =================================================
          DASHBOARD
-         ================================================== -->
+         ================================================= -->
 
     <div
         id="dashboard"
-        style="display: none;"
+        style="display:none;"
     >
 
         <div class="header">
@@ -403,7 +394,6 @@
                 <button
                     id="logoutButton"
                     class="logout-button"
-                    type="button"
                 >
                     Logout
                 </button>
@@ -416,7 +406,7 @@
         <div class="dashboard-container">
 
 
-            <!-- WELCOME -->
+            <!-- PROFILE -->
 
             <div class="welcome-card">
 
@@ -467,8 +457,6 @@
             <div class="dashboard-grid">
 
 
-                <!-- MY PROFILE -->
-
                 <div class="dashboard-card">
 
                     <h3>
@@ -480,7 +468,6 @@
                     </p>
 
                     <button
-                        type="button"
                         class="card-button"
                         onclick="showMyProfile()"
                     >
@@ -489,8 +476,6 @@
 
                 </div>
 
-
-                <!-- APPOINTMENTS -->
 
                 <div class="dashboard-card">
 
@@ -503,7 +488,6 @@
                     </p>
 
                     <button
-                        type="button"
                         class="card-button"
                         onclick="openAppointments()"
                     >
@@ -512,8 +496,6 @@
 
                 </div>
 
-
-                <!-- TRAINING -->
 
                 <div class="dashboard-card">
 
@@ -526,7 +508,6 @@
                     </p>
 
                     <button
-                        type="button"
                         class="card-button"
                         onclick="showComingSoon('Training')"
                     >
@@ -535,8 +516,6 @@
 
                 </div>
 
-
-                <!-- ALERT ROSTER -->
 
                 <div class="dashboard-card">
 
@@ -549,7 +528,6 @@
                     </p>
 
                     <button
-                        type="button"
                         class="card-button"
                         onclick="showComingSoon('Alert Roster')"
                     >
@@ -565,9 +543,9 @@
             <!-- MANAGEMENT -->
 
             <h2
-                class="section-title"
                 id="managementTitle"
-                style="display: none;"
+                class="section-title"
+                style="display:none;"
             >
                 Management
             </h2>
@@ -579,9 +557,9 @@
                 <!-- ADMIN -->
 
                 <div
-                    class="dashboard-card"
                     id="adminCard"
-                    style="display: none;"
+                    class="dashboard-card"
+                    style="display:none;"
                 >
 
                     <h3>
@@ -589,11 +567,10 @@
                     </h3>
 
                     <p>
-                        Manage application users and account status.
+                        Manage application users.
                     </p>
 
                     <button
-                        type="button"
                         class="card-button"
                         onclick="showComingSoon('User Management')"
                     >
@@ -606,9 +583,9 @@
                 <!-- SUPERVISOR -->
 
                 <div
-                    class="dashboard-card"
                     id="supervisorCard"
-                    style="display: none;"
+                    class="dashboard-card"
+                    style="display:none;"
                 >
 
                     <h3>
@@ -616,13 +593,12 @@
                     </h3>
 
                     <p>
-                        View and manage information for assigned personnel.
+                        View personnel assigned to you and their appointments.
                     </p>
 
                     <button
-                        type="button"
                         class="card-button"
-                        onclick="showComingSoon('Supervisor Tools')"
+                        onclick="openSupervisorTools()"
                     >
                         Open
                     </button>
@@ -637,15 +613,13 @@
 
 
 
-    <!-- ==================================================
+    <!-- =================================================
          APPOINTMENTS SCREEN
-         IMPORTANT:
-         This is OUTSIDE the dashboard.
-         ================================================== -->
+         ================================================= -->
 
     <div
         id="appointmentsScreen"
-        style="display: none;"
+        style="display:none;"
     >
 
         <div class="header">
@@ -657,7 +631,6 @@
                 </h1>
 
                 <button
-                    type="button"
                     class="back-button"
                     onclick="closeAppointments()"
                 >
@@ -672,17 +645,11 @@
         <div class="dashboard-container">
 
 
-            <!-- CREATE APPOINTMENT -->
-
             <div class="appointment-form">
 
                 <h2>
                     Create Appointment
                 </h2>
-
-                <p>
-                    Create an appointment for yourself.
-                </p>
 
                 <form id="appointmentForm">
 
@@ -756,9 +723,6 @@
             </div>
 
 
-
-            <!-- MY APPOINTMENTS -->
-
             <h2 class="section-title">
                 My Appointments
             </h2>
@@ -767,9 +731,69 @@
             <div id="appointmentsList">
 
                 <div class="appointment-card">
-
                     <p>
                         Loading appointments...
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         SUPERVISOR SCREEN
+         ================================================= -->
+
+    <div
+        id="supervisorScreen"
+        style="display:none;"
+    >
+
+        <div class="header">
+
+            <div class="header-content">
+
+                <h1>
+                    Supervisor Tools
+                </h1>
+
+                <button
+                    class="back-button"
+                    onclick="closeSupervisorTools()"
+                >
+                    Back to Dashboard
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-container">
+
+            <div class="welcome-card">
+
+                <h2>
+                    Assigned Personnel
+                </h2>
+
+                <p>
+                    Personnel assigned to you and their appointments are shown below.
+                </p>
+
+            </div>
+
+
+            <div id="supervisorPersonnelList">
+
+                <div class="personnel-card">
+
+                    <p>
+                        Loading personnel...
                     </p>
 
                 </div>
@@ -782,14 +806,15 @@
 
 
 
-    <!-- ==================================================
+    <!-- =================================================
          JAVASCRIPT
-         ================================================== -->
+         ================================================= -->
 
     <script>
 
+
         /* =================================================
-           SUPABASE CONNECTION
+           SUPABASE
            ================================================= */
 
         const SUPABASE_URL =
@@ -804,11 +829,6 @@
                 SUPABASE_KEY
             );
 
-
-
-        /* =================================================
-           CURRENT USER
-           ================================================= */
 
         window.currentUserProfile = null;
 
@@ -848,8 +868,6 @@
                     message.textContent =
                         'Signing in...';
 
-                    message.className = '';
-
 
                     const {
                         data: authData,
@@ -866,11 +884,6 @@
 
                     if (authError) {
 
-                        console.error(
-                            'Login error:',
-                            authError
-                        );
-
                         message.textContent =
                             'Login failed: ' +
                             authError.message;
@@ -885,7 +898,7 @@
                     if (!authData.user) {
 
                         message.textContent =
-                            'Login failed. No user was returned.';
+                            'Login failed.';
 
                         message.className =
                             'error';
@@ -894,10 +907,6 @@
                     }
 
 
-
-                    /* =========================================
-                       GET APP USER PROFILE
-                       ========================================= */
 
                     const {
                         data: userProfile,
@@ -915,11 +924,6 @@
 
                     if (profileError) {
 
-                        console.error(
-                            'Profile lookup error:',
-                            profileError
-                        );
-
                         message.textContent =
                             'Profile Error: ' +
                             profileError.message;
@@ -930,11 +934,6 @@
                         return;
                     }
 
-
-
-                    /* =========================================
-                       CHECK ACCOUNT STATUS
-                       ========================================= */
 
                     if (
                         userProfile.Account_Status !==
@@ -947,7 +946,7 @@
 
 
                         message.textContent =
-                            'Your account is not active. Please contact an administrator.';
+                            'Your account is not active.';
 
                         message.className =
                             'error';
@@ -955,11 +954,6 @@
                         return;
                     }
 
-
-
-                    /* =========================================
-                       SHOW DASHBOARD
-                       ========================================= */
 
                     showDashboard(
                         userProfile
@@ -971,7 +965,7 @@
 
 
         /* =================================================
-           SHOW DASHBOARD
+           DASHBOARD
            ================================================= */
 
         function showDashboard(
@@ -984,26 +978,28 @@
 
             document
                 .getElementById('loginScreen')
-                .style
-                .display = 'none';
+                .style.display =
+                'none';
 
 
             document
                 .getElementById('appointmentsScreen')
-                .style
-                .display = 'none';
+                .style.display =
+                'none';
+
+
+            document
+                .getElementById('supervisorScreen')
+                .style.display =
+                'none';
 
 
             document
                 .getElementById('dashboard')
-                .style
-                .display = 'block';
+                .style.display =
+                'block';
 
 
-
-            /* =========================================
-               PROFILE INFORMATION
-               ========================================= */
 
             document
                 .getElementById('welcomeMessage')
@@ -1049,10 +1045,6 @@
                     userProfile.Account_Status || '-';
 
 
-
-            /* =========================================
-               MANAGEMENT CARDS
-               ========================================= */
 
             const adminCard =
                 document.getElementById(
@@ -1134,7 +1126,7 @@
             if (!user) {
 
                 alert(
-                    'Your profile could not be loaded.'
+                    'Profile could not be loaded.'
                 );
 
                 return;
@@ -1177,48 +1169,21 @@
 
         function openAppointments() {
 
-            console.log(
-                'Opening appointments...'
-            );
-
-
-            const dashboard =
-                document.getElementById(
-                    'dashboard'
-                );
-
-
-            const appointmentsScreen =
-                document.getElementById(
-                    'appointmentsScreen'
-                );
-
-
-            if (!dashboard) {
-
-                alert(
-                    'Dashboard element was not found.'
-                );
-
-                return;
-            }
-
-
-            if (!appointmentsScreen) {
-
-                alert(
-                    'Appointments screen was not found.'
-                );
-
-                return;
-            }
-
-
-            dashboard.style.display =
+            document
+                .getElementById('dashboard')
+                .style.display =
                 'none';
 
 
-            appointmentsScreen.style.display =
+            document
+                .getElementById('supervisorScreen')
+                .style.display =
+                'none';
+
+
+            document
+                .getElementById('appointmentsScreen')
+                .style.display =
                 'block';
 
 
@@ -1227,30 +1192,17 @@
         }
 
 
-
-        /* =================================================
-           CLOSE APPOINTMENTS
-           ================================================= */
-
         function closeAppointments() {
 
-            const dashboard =
-                document.getElementById(
-                    'dashboard'
-                );
-
-
-            const appointmentsScreen =
-                document.getElementById(
-                    'appointmentsScreen'
-                );
-
-
-            appointmentsScreen.style.display =
+            document
+                .getElementById('appointmentsScreen')
+                .style.display =
                 'none';
 
 
-            dashboard.style.display =
+            document
+                .getElementById('dashboard')
+                .style.display =
                 'block';
 
         }
@@ -1258,7 +1210,7 @@
 
 
         /* =================================================
-           LOAD APPOINTMENTS
+           LOAD MY APPOINTMENTS
            ================================================= */
 
         async function loadAppointments() {
@@ -1290,7 +1242,6 @@
                 '</div>';
 
 
-
             const {
                 data,
                 error
@@ -1310,26 +1261,18 @@
                     );
 
 
-
             if (error) {
-
-                console.error(
-                    'Appointment loading error:',
-                    error
-                );
-
 
                 list.innerHTML =
                     '<div class="appointment-card">' +
                     '<p class="error">' +
                     'Unable to load appointments: ' +
-                    error.message +
+                    escapeHtml(error.message) +
                     '</p>' +
                     '</div>';
 
                 return;
             }
-
 
 
             if (
@@ -1346,9 +1289,7 @@
             }
 
 
-
             list.innerHTML = '';
-
 
 
             data.forEach(
@@ -1438,7 +1379,7 @@
                     if (!user) {
 
                         alert(
-                            'You must be logged in to create an appointment.'
+                            'You must be logged in.'
                         );
 
                         return;
@@ -1453,9 +1394,6 @@
 
                     message.textContent =
                         'Creating appointment...';
-
-                    message.className = '';
-
 
 
                     const title =
@@ -1539,19 +1477,11 @@
                             });
 
 
-
                     if (error) {
-
-                        console.error(
-                            'Appointment creation error:',
-                            error
-                        );
-
 
                         message.textContent =
                             'Unable to create appointment: ' +
                             error.message;
-
 
                         message.className =
                             'error';
@@ -1560,14 +1490,11 @@
                     }
 
 
-
                     message.textContent =
                         'Appointment created successfully.';
 
-
                     message.className =
                         'success';
-
 
 
                     document
@@ -1585,7 +1512,389 @@
 
 
         /* =================================================
-           SIMPLE HTML SAFETY FUNCTION
+           SUPERVISOR TOOLS
+           ================================================= */
+
+        function openSupervisorTools() {
+
+            document
+                .getElementById('dashboard')
+                .style.display =
+                'none';
+
+
+            document
+                .getElementById('appointmentsScreen')
+                .style.display =
+                'none';
+
+
+            document
+                .getElementById('supervisorScreen')
+                .style.display =
+                'block';
+
+
+            loadSupervisorPersonnel();
+
+        }
+
+
+        function closeSupervisorTools() {
+
+            document
+                .getElementById('supervisorScreen')
+                .style.display =
+                'none';
+
+
+            document
+                .getElementById('dashboard')
+                .style.display =
+                'block';
+
+        }
+
+
+
+        /* =================================================
+           LOAD SUPERVISOR PERSONNEL
+           ================================================= */
+
+        async function loadSupervisorPersonnel() {
+
+            const supervisor =
+                window.currentUserProfile;
+
+
+            const list =
+                document.getElementById(
+                    'supervisorPersonnelList'
+                );
+
+
+            if (!supervisor) {
+
+                list.innerHTML =
+                    '<div class="personnel-card">' +
+                    '<p class="error">' +
+                    'Supervisor profile could not be loaded.' +
+                    '</p>' +
+                    '</div>';
+
+                return;
+            }
+
+
+            list.innerHTML =
+                '<div class="personnel-card">' +
+                '<p>Loading personnel...</p>' +
+                '</div>';
+
+
+
+            /* =============================================
+               FIND PERSONNEL ASSIGNED TO SUPERVISOR
+               ============================================= */
+
+            const {
+                data: personnel,
+                error: personnelError
+            } =
+                await supabaseClient
+                    .from('App_Users')
+                    .select('*')
+                    .eq(
+                        'Supervisor_id',
+                        supervisor.id
+                    )
+                    .order(
+                        'Last_Name',
+                        {
+                            ascending: true
+                        }
+                    );
+
+
+            if (personnelError) {
+
+                console.error(
+                    'Personnel error:',
+                    personnelError
+                );
+
+
+                list.innerHTML =
+                    '<div class="personnel-card">' +
+                    '<p class="error">' +
+                    'Unable to load personnel: ' +
+                    escapeHtml(
+                        personnelError.message
+                    ) +
+                    '</p>' +
+                    '</div>';
+
+                return;
+            }
+
+
+            if (
+                !personnel ||
+                personnel.length === 0
+            ) {
+
+                list.innerHTML =
+                    '<div class="personnel-card">' +
+                    '<p class="no-data">' +
+                    'No personnel are currently assigned to you.' +
+                    '</p>' +
+                    '</div>';
+
+                return;
+            }
+
+
+            list.innerHTML = '';
+
+
+
+            /* =============================================
+               LOAD EACH PERSON'S APPOINTMENTS
+               ============================================= */
+
+            for (
+                const person of personnel
+            ) {
+
+
+                const card =
+                    document.createElement(
+                        'div'
+                    );
+
+
+                card.className =
+                    'personnel-card';
+
+
+                card.innerHTML =
+
+                    '<h3>' +
+
+                    escapeHtml(
+                        person.Rank || ''
+                    ) +
+
+                    ' ' +
+
+                    escapeHtml(
+                        person.First_Name || ''
+                    ) +
+
+                    ' ' +
+
+                    escapeHtml(
+                        person.Last_Name || ''
+                    ) +
+
+                    '</h3>' +
+
+                    '<p><strong>Soldier ID:</strong> ' +
+
+                    escapeHtml(
+                        person.Soldier_id || '-'
+                    ) +
+
+                    '</p>' +
+
+                    '<p><strong>Email:</strong> ' +
+
+                    escapeHtml(
+                        person.Email || '-'
+                    ) +
+
+                    '</p>' +
+
+                    '<hr>' +
+
+                    '<h4>Appointments</h4>' +
+
+                    '<p>Loading appointments...</p>';
+
+
+                list.appendChild(
+                    card
+                );
+
+
+
+                /* =========================================
+                   GET APPOINTMENTS
+                   ========================================= */
+
+                if (!person.auth_user_id) {
+
+                    card.innerHTML +=
+                        '<p class="no-data">' +
+                        'No authentication account is linked to this user.' +
+                        '</p>';
+
+                    continue;
+                }
+
+
+                const {
+                    data: appointments,
+                    error: appointmentError
+                } =
+                    await supabaseClient
+                        .from('Appointments')
+                        .select('*')
+                        .eq(
+                            'assigned_to',
+                            person.auth_user_id
+                        )
+                        .order(
+                            'appointment_date',
+                            {
+                                ascending: true
+                            }
+                        );
+
+
+
+                if (appointmentError) {
+
+                    card.innerHTML +=
+                        '<p class="error">' +
+                        'Unable to load appointments: ' +
+                        escapeHtml(
+                            appointmentError.message
+                        ) +
+                        '</p>';
+
+                    continue;
+                }
+
+
+
+                /* =========================================
+                   NO APPOINTMENTS
+                   ========================================= */
+
+                if (
+                    !appointments ||
+                    appointments.length === 0
+                ) {
+
+                    card.innerHTML +=
+                        '<p class="no-data">' +
+                        'No appointments.' +
+                        '</p>';
+
+                    continue;
+                }
+
+
+
+                /* =========================================
+                   APPOINTMENTS
+                   ========================================= */
+
+                const appointmentContainer =
+                    document.createElement(
+                        'div'
+                    );
+
+
+                appointments.forEach(
+                    function(appointment) {
+
+                        const appointmentDiv =
+                            document.createElement(
+                                'div'
+                            );
+
+
+                        appointmentDiv.className =
+                            'appointment-card';
+
+
+                        appointmentDiv.innerHTML =
+
+                            '<h3>' +
+
+                            escapeHtml(
+                                appointment.title
+                            ) +
+
+                            '</h3>' +
+
+                            '<p><strong>Date:</strong> ' +
+
+                            escapeHtml(
+                                appointment.appointment_date
+                            ) +
+
+                            '</p>' +
+
+                            '<p><strong>Time:</strong> ' +
+
+                            escapeHtml(
+                                appointment.appointment_time ||
+                                'Not specified'
+                            ) +
+
+                            '</p>' +
+
+                            '<p><strong>Location:</strong> ' +
+
+                            escapeHtml(
+                                appointment.location ||
+                                'Not specified'
+                            ) +
+
+                            '</p>' +
+
+                            '<p><strong>Notes:</strong> ' +
+
+                            escapeHtml(
+                                appointment.description ||
+                                'None'
+                            ) +
+
+                            '</p>' +
+
+                            '<p><strong>Status:</strong> ' +
+
+                            escapeHtml(
+                                appointment.status ||
+                                'Scheduled'
+                            ) +
+
+                            '</p>';
+
+
+                        appointmentContainer.appendChild(
+                            appointmentDiv
+                        );
+
+                    }
+                );
+
+
+                card.appendChild(
+                    appointmentContainer
+                );
+
+            }
+
+        }
+
+
+
+        /* =================================================
+           ESCAPE HTML
            ================================================= */
 
         function escapeHtml(
@@ -1660,7 +1969,6 @@
                 'click',
                 async function() {
 
-
                     await supabaseClient
                         .auth
                         .signOut();
@@ -1682,6 +1990,15 @@
                     document
                         .getElementById(
                             'appointmentsScreen'
+                        )
+                        .style
+                        .display =
+                        'none';
+
+
+                    document
+                        .getElementById(
+                            'supervisorScreen'
                         )
                         .style
                         .display =
@@ -1722,7 +2039,6 @@
 
                 }
             );
-
 
 
     </script>
