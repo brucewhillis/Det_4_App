@@ -375,19 +375,21 @@
 
                 <div class="dashboard-card">
 
-                    <h3>
-                        My Profile
-                    </h3>
+    <h3>
+        My Profile
+    </h3>
 
-                    <p>
-                        View your Det 4 personnel information.
-                    </p>
+    <p>
+        View your Det 4 personnel information.
+    </p>
 
-                    <button
-                        onclick="showComingSoon('My Profile')"
-                    >
-                        Open
-                    </button>
+    <button
+        onclick="openProfile()"
+    >
+        Open
+    </button>
+
+</div>
 
                 </div>
 
@@ -667,6 +669,7 @@ const supabaseClient = supabase.createClient(
 
         // DISPLAY DASHBOARD
         function showDashboard(userProfile) {
+            window.currentUserProfile = userProfile;
 
             document
                 .getElementById('loginScreen')
@@ -813,7 +816,24 @@ const supabaseClient = supabase.createClient(
                 }
             );
 
+// MY PROFILE
+function openProfile() {
 
+    const profile =
+        window.currentUserProfile;
+
+    alert(
+        'MY PROFILE\n\n' +
+        'Rank: ' + (profile.Rank || '-') + '\n' +
+        'First Name: ' + (profile.First_Name || '-') + '\n' +
+        'Last Name: ' + (profile.Last_Name || '-') + '\n' +
+        'Email: ' + (profile.Email || '-') + '\n' +
+        'Soldier ID: ' + (profile.Soldier_id || '-') + '\n' +
+        'Role: ' + (profile.Role || '-') + '\n' +
+        'Account Status: ' + (profile.Account_Status || '-')
+    );
+
+}
         // TEMPORARY BUTTON FUNCTION
         function showComingSoon(feature) {
 
