@@ -249,6 +249,124 @@
 
     <!-- DASHBOARD SCREEN -->
     <div id="dashboard">
+        <!-- APPOINTMENTS SCREEN -->
+<div
+    id="appointmentsScreen"
+    style="display: none;"
+>
+
+    <div class="header">
+
+        <div class="header-content">
+
+            <h1>
+                Appointments
+            </h1>
+
+            <button
+                class="logout-button"
+                onclick="closeAppointments()"
+            >
+                Back
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-container">
+
+        <div class="welcome-card">
+
+            <h2>
+                Create Appointment
+            </h2>
+
+            <form id="appointmentForm">
+
+                <label for="appointmentTitle">
+                    Appointment
+                </label>
+
+                <input
+                    type="text"
+                    id="appointmentTitle"
+                    placeholder="Example: Medical Appointment"
+                    required
+                >
+
+
+                <label for="appointmentDate">
+                    Date
+                </label>
+
+                <input
+                    type="date"
+                    id="appointmentDate"
+                    required
+                >
+
+
+                <label for="appointmentTime">
+                    Time
+                </label>
+
+                <input
+                    type="time"
+                    id="appointmentTime"
+                >
+
+
+                <label for="appointmentLocation">
+                    Location
+                </label>
+
+                <input
+                    type="text"
+                    id="appointmentLocation"
+                    placeholder="Example: Fort Carson"
+                >
+
+
+                <label for="appointmentDescription">
+                    Notes
+                </label>
+
+                <input
+                    type="text"
+                    id="appointmentDescription"
+                    placeholder="Additional information"
+                >
+
+
+                <button type="submit">
+                    Create Appointment
+                </button>
+
+            </form>
+
+            <div id="appointmentMessage"></div>
+
+        </div>
+
+
+        <h2 class="section-title">
+            My Appointments
+        </h2>
+
+
+        <div id="appointmentsList">
+
+            <p>
+                Loading appointments...
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
 
         <div class="header">
 
@@ -400,11 +518,11 @@
     </h3>
 
     <p>
-        View and manage your appointments.
+        Create and view your appointments.
     </p>
 
     <button
-        onclick="showComingSoon('Appointments')"
+        onclick="openAppointments()"
     >
         Open
     </button>
@@ -815,7 +933,260 @@ const supabaseClient = supabase.createClient(
 
                 }
             );
+// APPOINTMENTS
 
+function openAppointments() {
+
+    document
+        .getElementById('dashboard')
+        .style
+        .display = 'none';
+
+    document
+        .getElementById('appointmentsScreen')
+        .style
+        .display = 'block';
+
+    loadAppointments();
+}
+
+
+function closeAppointments() {
+
+    document
+        .getElementById('appointmentsScreen')
+        .style
+        .display = 'none';
+
+    document
+        .getElementById('dashboard')
+        .style
+        .display = 'block';
+}
+
+
+async function loadAppointments() {
+
+    const user =
+        window.currentUserProfile;
+
+    if (!user) {
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from('Appointments')
+            .select('*')
+            .eq(
+                'assigned_to',
+                user.auth_user_id
+            )
+            .order(
+                'appointment_date',
+                { ascending: true }
+            );
+
+
+    const list =
+        document.getElementById(
+            'appointmentsList'
+        );
+
+
+    if (error) {
+
+        console.error(
+            'Appointment loading error:',
+            error
+        );
+
+        list.innerHTML =
+            '<p>Unable to load appointments.</p>';
+
+        return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+        list.innerHTML =
+            '<div class="welcome-card">' +
+            '<p>You currently have no appointments.</p>' +
+            '</div>';
+
+        return;
+    }
+
+
+    list.innerHTML = '';
+
+
+    data.forEach(function(appointment) {
+
+        const card =
+            document.createElement('div');
+
+        card.className =
+            'welcome-card';
+
+
+        card.innerHTML =
+            '<h3>' +
+            appointment.title +
+            '</h3>' +
+
+            '<p><strong>Date:</strong> ' +
+            appointment.appointment_date +
+            '</p>' +
+
+            '<p><strong>Time:</strong> ' +
+            (appointment.appointment_time || 'Not specified') +
+            '</p>' +
+
+            '<p><strong>Location:</strong> ' +
+            (appointment.location || 'Not specified') +
+            '</p>' +
+
+            '<p><strong>Notes:</strong> ' +
+            (appointment.description || 'None') +
+            '</p>' +
+
+            '<p><strong>Status:</strong> ' +
+            appointment.status +
+            '</p>';
+
+
+        list.appendChild(card);
+
+    });
+
+}
+
+
+document
+    .getElementById('appointmentForm')
+    .addEventListener(
+        'submit',
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const user =
+                window.currentUserProfile;
+
+
+            const message =
+                document.getElementById(
+                    'appointmentMessage'
+                );
+
+
+            message.textContent =
+                'Creating appointment...';
+
+
+            const title =
+                document
+                    .getElementById(
+                        'appointmentTitle'
+                    )
+                    .value
+                    .trim();
+
+
+            const date =
+                document
+                    .getElementById(
+                        'appointmentDate'
+                    )
+                    .value;
+
+
+            const time =
+                document
+                    .getElementById(
+                        'appointmentTime'
+                    )
+                    .value;
+
+
+            const location =
+                document
+                    .getElementById(
+                        'appointmentLocation'
+                    )
+                    .value
+                    .trim();
+
+
+            const description =
+                document
+                    .getElementById(
+                        'appointmentDescription'
+                    )
+                    .value
+                    .trim();
+
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from('Appointments')
+                    .insert({
+                        title: title,
+                        appointment_date: date,
+                        appointment_time: time || null,
+                        location: location || null,
+                        description: description || null,
+                        created_by: user.auth_user_id,
+                        assigned_to: user.auth_user_id,
+                        status: 'Scheduled'
+                    });
+
+
+            if (error) {
+
+                console.error(
+                    'Appointment creation error:',
+                    error
+                );
+
+                message.textContent =
+                    'Unable to create appointment: ' +
+                    error.message;
+
+                message.className =
+                    'error';
+
+                return;
+            }
+
+
+            message.textContent =
+                'Appointment created successfully.';
+
+            message.className =
+                'success';
+
+
+            document
+                .getElementById(
+                    'appointmentForm'
+                )
+                .reset();
+
+
+            loadAppointments();
+
+        }
+    );
 // MY PROFILE
 function openProfile() {
 
