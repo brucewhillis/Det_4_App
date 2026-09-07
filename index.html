@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,6 +75,14 @@
             margin-top: 15px;
             text-align: center;
         }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
     </style>
 </head>
 
@@ -81,7 +90,7 @@
 
     <div class="login-container">
 
-        <h1>Platoon App</h1>
+        <h1>Det 4 App</h1>
 
         <div class="subtitle">
             Sign in to continue
@@ -90,6 +99,7 @@
         <form id="loginForm">
 
             <label for="email">Email</label>
+
             <input
                 type="email"
                 id="email"
@@ -98,6 +108,7 @@
             >
 
             <label for="password">Password</label>
+
             <input
                 type="password"
                 id="password"
@@ -114,34 +125,157 @@
         <div id="message"></div>
 
     </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-    const SUPABASE_URL = 'https://gsgnnqfjmpxkoddlwwiu.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_abEQ7KX-rKJnmLK388UaYQ_ZDBjzcZk';
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    const supabaseClient = supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-</script>
     <script>
-    async function testSupabaseConnection() {
-        const { data, error } = await supabaseClient
-            .from('connection_test')
-            .select('*');
 
-        if (error) {
-            console.error('Supabase connection failed:', error);
-            alert('Supabase connection FAILED: ' + error.message);
-            return;
-        }
+        const SUPABASE_URL =
+            'https://gsgnnqfjmpxkoddlwwiu.supabase.co';
 
-        console.log('Supabase connection successful:', data);
-        alert('Supabase connection SUCCESSFUL!');
-    }
+        const SUPABASE_KEY =
+            'sb_publishable_abEQ7KX-rKJnmLK388UaYQ_ZDBjzcZk';
 
-    testSupabaseConnection();
-</script>
+        const supabaseClient = supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+        // Handle Login
+        document
+            .getElementById('loginForm')
+            .addEventListener('submit', async function(event) {
+
+                event.preventDefault();
+
+                const email =
+                    document.getElementById('email').value.trim();
+
+                const password =
+                    document.getElementById('password').value;
+
+                const message =
+                    document.getElementById('message');
+
+                message.textContent = 'Signing in...';
+                message.className = '';
+
+
+                // Sign in through Supabase Authentication
+                const { data: authData, error: authError } =
+                    await supabaseClient.auth.signInWithPassword({
+                        email: email,
+                        password: password
+                    });
+
+
+                // Check for login error
+                if (authError) {
+
+                    console.error('Login error:', authError);
+
+                    message.textContent =
+                        'Login failed: ' + authError.message;
+
+                    message.className = 'error';
+
+                    return;
+                }
+
+
+                // Make sure we received a user
+                if (!authData.user) {
+
+                    message.textContent =
+                        'Login failed. No user was returned.';
+
+                    message.className = 'error';
+
+                    return;
+                }
+
+
+                // Get the user's profile from app_users
+                const { data: userProfile, error: profileError } =
+                    await supabaseClient
+                        .from('app_users')
+                        .select('*')
+                        .eq('auth_user_id', authData.user.id)
+                        .single();
+
+
+                // Check for profile error
+                if (profileError) {
+
+                    console.error(
+                        'Profile lookup error:',
+                        profileError
+                    );
+
+                    message.textContent =
+                        'Login successful, but your Det 4 profile could not be found.';
+
+                    message.className = 'error';
+
+                    return;
+                }
+
+
+                // Check account status
+                if (userProfile.Account_Status !== 'Active') {
+
+                    await supabaseClient.auth.signOut();
+
+                    message.textContent =
+                        'Your account is not active. Please contact an administrator.';
+
+                    message.className = 'error';
+
+                    return;
+                }
+
+
+                // Successful login
+                message.textContent =
+                    'Welcome, ' +
+                    userProfile.Rank + ' ' +
+                    userProfile.First_Name + ' ' +
+                    userProfile.Last_Name + '!';
+
+                message.className = 'success';
+
+
+                console.log(
+                    'Logged-in user:',
+                    authData.user
+                );
+
+                console.log(
+                    'Det 4 profile:',
+                    userProfile
+                );
+
+
+                // Temporary delay so we can see the successful login
+                setTimeout(function() {
+
+                    alert(
+                        'Login successful!\n\n' +
+                        'Welcome, ' +
+                        userProfile.Rank + ' ' +
+                        userProfile.Last_Name + '!\n\n' +
+                        'Role: ' +
+                        userProfile.Role
+                    );
+
+                }, 500);
+
+            });
+
+    </script>
+
 </body>
 </html>
+```
